@@ -270,9 +270,20 @@ export default function App() {
   const [pressed, setPressed] = useState(false);
   const [tilt, setTilt] = useState({ x: 0, y: 0 });
   const [dragY, setDragY] = useState(0);
+  const [moreBelow, setMoreBelow] = useState(false);
   const touchStart = useRef<{ x: number; y: number } | null>(null);
   const coverDrag = useRef<{ y: number } | null>(null);
   const pageRef = useRef<HTMLElement | null>(null);
+
+  const updateMoreBelow = useCallback(() => {
+    const el = pageRef.current;
+    if (!el) {
+      setMoreBelow(false);
+      return;
+    }
+    const remaining = el.scrollHeight - el.scrollTop - el.clientHeight;
+    setMoreBelow(remaining > 28);
+  }, []);
 
   useEffect(() => {
     const id = window.setTimeout(() => setReady(true), 60);
@@ -281,7 +292,9 @@ export default function App() {
 
   useEffect(() => {
     pageRef.current?.scrollTo({ top: 0 });
-  }, [index]);
+    const id = window.setTimeout(updateMoreBelow, 80);
+    return () => window.clearTimeout(id);
+  }, [index, phase, flipping, updateMoreBelow]);
 
   const openBook = useCallback(() => {
     if (phase !== "sealed") return;
@@ -470,6 +483,7 @@ export default function App() {
                   chapter.ending ? "novel-page--ending" : "",
                 ].join(" ")}
                 key={chapter.id}
+                onScroll={updateMoreBelow}
               >
                 <header className="novel-page__meta">
                   <span>
@@ -524,22 +538,30 @@ export default function App() {
                 ) : null}
 
                 <div className="novel-page__turn">
-                  <button
-                    type="button"
-                    className="turn-btn"
-                    onClick={() => go(-1)}
-                    disabled={index === 0 || flipping}
-                  >
-                    ←
-                  </button>
-                  <button
-                    type="button"
-                    className="turn-btn turn-btn--next"
-                    onClick={() => go(1)}
-                    disabled={isLast || flipping}
-                  >
-                    {isLast ? "Fin" : "Siguiente →"}
-                  </button>
+                  {moreBelow ? (
+                    <p className="novel-more" aria-hidden>
+                      <span className="novel-more__arrow">↓</span>
+                      Hay más texto abajo
+                    </p>
+                  ) : null}
+                  <div className="novel-page__nav">
+                    <button
+                      type="button"
+                      className="turn-btn"
+                      onClick={() => go(-1)}
+                      disabled={index === 0 || flipping}
+                    >
+                      ←
+                    </button>
+                    <button
+                      type="button"
+                      className="turn-btn turn-btn--next"
+                      onClick={() => go(1)}
+                      disabled={isLast || flipping}
+                    >
+                      {isLast ? "Fin" : "Siguiente →"}
+                    </button>
+                  </div>
                 </div>
               </article>
             </div>
