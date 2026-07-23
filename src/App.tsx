@@ -17,6 +17,7 @@ import eren from "./assets/eren.png";
 import ken from "./assets/ken.png";
 import edward from "./assets/edward.png";
 import luffy from "./assets/luffy.png"
+import shojo from "./assets/shojo.png"
 type Phase = "sealed" | "opening" | "reading";
 
 type Chapter = {
@@ -181,7 +182,7 @@ const CHAPTERS: Chapter[] = [
       "Creo que esa fue una de las lecciones más importantes que me dejó todo esto.",
     ],
     art: {
-      src: panelA,
+      src: shojo,
       side: "right",
     },
   },
