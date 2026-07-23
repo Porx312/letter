@@ -1,0 +1,544 @@
+:root {
+  --ink: #f4f1ea;
+  --paper: #faf8f3;
+  --paper-ink: #1c1916;
+  --paper-muted: #6a635c;
+  --night: #0a090a;
+  --accent: #e84b5a;
+  --font-manga: "Zen Maru Gothic", "M PLUS Rounded 1c", system-ui, sans-serif;
+  --font-roman: "Cormorant Garamond", Georgia, serif;
+  --font-body: "Literata", Georgia, serif;
+  --font-ui: "M PLUS Rounded 1c", system-ui, sans-serif;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html,
+body,
+#root {
+  margin: 0;
+  width: 100%;
+  height: 100%;
+  height: 100dvh;
+  overflow: hidden;
+  overscroll-behavior: none;
+}
+
+body {
+  font-family: var(--font-ui);
+  background: var(--night);
+  color: var(--ink);
+  -webkit-font-smoothing: antialiased;
+  position: fixed;
+  inset: 0;
+}
+
+button {
+  font: inherit;
+}
+
+.page {
+  position: relative;
+  display: flex;
+  justify-content: center;
+  width: 100%;
+  height: 100%;
+  height: 100dvh;
+  max-height: 100dvh;
+  overflow: hidden;
+  background: #090909;
+}
+
+.tone {
+  pointer-events: none;
+  position: absolute;
+  inset: 0;
+  opacity: 0.1;
+  background-image: radial-gradient(#ffffff 0.6px, transparent 0.6px);
+  background-size: 3px 3px;
+  mix-blend-mode: overlay;
+}
+
+.shell {
+  position: relative;
+  z-index: 1;
+  display: flex;
+  width: 100%;
+  max-width: 26rem;
+  height: 100%;
+  margin: 0 auto;
+  padding: max(0.35rem, env(safe-area-inset-top)) 0.4rem
+    max(0.35rem, env(safe-area-inset-bottom));
+  overflow: hidden;
+}
+
+.phone {
+  position: relative;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  height: 100%;
+  overflow: hidden;
+}
+
+/* ——— Cover ——— */
+.cover {
+  position: relative;
+  display: block;
+  flex: 1 1 auto;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  margin: 0;
+  padding: 0;
+  border: 2px solid #f3ebe3;
+  background: #111;
+  cursor: pointer;
+  overflow: hidden;
+  -webkit-tap-highlight-color: transparent;
+  touch-action: none;
+  transform-origin: center bottom;
+  box-shadow: 0 16px 36px rgba(0, 0, 0, 0.5);
+  will-change: transform;
+}
+
+.cover:disabled {
+  cursor: default;
+}
+
+.cover--open {
+  animation: cover-open 0.9s cubic-bezier(0.4, 0.05, 0.2, 1) forwards;
+  pointer-events: none;
+}
+
+@keyframes cover-open {
+  0% {
+    opacity: 1;
+    transform: perspective(900px) rotateX(0);
+  }
+  60% {
+    opacity: 1;
+    transform: perspective(900px) rotateX(-30deg) translateY(-6%);
+  }
+  100% {
+    opacity: 0;
+    transform: perspective(900px) rotateX(-75deg) translateY(-28%) scale(0.94);
+  }
+}
+
+.cover__photo {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  object-position: 72% 42%;
+  pointer-events: none;
+  transform: scale(1.04);
+}
+
+.cover__veil {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(
+      180deg,
+      rgba(8, 6, 6, 0.62) 0%,
+      rgba(8, 6, 6, 0.18) 38%,
+      rgba(8, 6, 6, 0.28) 55%,
+      rgba(8, 6, 6, 0.82) 100%
+    ),
+    linear-gradient(
+      90deg,
+      rgba(8, 6, 6, 0.35) 0%,
+      transparent 40%
+    );
+}
+
+.cover__spine {
+  position: absolute;
+  left: 0;
+  top: 0;
+  bottom: 0;
+  z-index: 2;
+  width: 0.45rem;
+  background: linear-gradient(180deg, #d94a54, #a81f2c 55%, #6e121a);
+}
+
+.cover__frame {
+  position: absolute;
+  z-index: 2;
+  inset: 0.75rem 0.75rem 0.75rem 1rem;
+  border: 1px solid rgba(255, 248, 244, 0.35);
+  pointer-events: none;
+}
+
+.cover__ui {
+  position: absolute;
+  z-index: 3;
+  inset: 0;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  padding: 1.35rem 1.15rem 1.2rem 1.4rem;
+  color: #fff8f4;
+  text-align: left;
+}
+
+.cover__volume {
+  margin: 0;
+  font-family: var(--font-roman);
+  font-size: 0.82rem;
+  font-weight: 600;
+  letter-spacing: 0.28em;
+  text-transform: uppercase;
+  color: rgba(255, 248, 244, 0.72);
+}
+
+.cover__titles {
+  margin-top: auto;
+  margin-bottom: 1.5rem;
+  max-width: 16rem;
+}
+
+.cover__title {
+  margin: 0;
+  font-family: var(--font-roman);
+  font-size: clamp(2.35rem, 11.5vw, 3.15rem);
+  font-weight: 600;
+  line-height: 1.02;
+  letter-spacing: -0.01em;
+  text-shadow:
+    0 2px 18px rgba(0, 0, 0, 0.45),
+    0 1px 2px rgba(0, 0, 0, 0.35);
+}
+
+.cover__tagline {
+  margin: 0.85rem 0 0;
+  font-family: var(--font-body);
+  font-size: clamp(0.92rem, 3.6vw, 1.02rem);
+  font-style: italic;
+  font-weight: 400;
+  line-height: 1.4;
+  color: rgba(255, 248, 244, 0.78);
+  text-shadow: 0 1px 10px rgba(0, 0, 0, 0.35);
+}
+
+.cover__cta {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.45rem;
+}
+
+.cover__pulse {
+  width: 0.45rem;
+  height: 0.45rem;
+  border-radius: 50%;
+  background: #ff6b75;
+  animation: pulse 1.6s ease-out infinite;
+}
+
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(255, 90, 100, 0.5);
+  }
+  70% {
+    box-shadow: 0 0 0 12px rgba(255, 90, 100, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(255, 90, 100, 0);
+  }
+}
+
+.cover__hint {
+  margin: 0;
+  font-family: var(--font-ui);
+  font-size: 0.68rem;
+  font-weight: 700;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: rgba(255, 248, 244, 0.62);
+}
+
+.cover__bar {
+  width: min(62%, 9.5rem);
+  height: 2px;
+  overflow: hidden;
+  background: rgba(255, 255, 255, 0.18);
+}
+
+.cover__bar span {
+  display: block;
+  height: 100%;
+  width: 100%;
+  background: #ff6b75;
+  transform-origin: left center;
+  transform: scaleX(0);
+}
+
+/* ——— Reader ——— */
+.reader {
+  display: flex;
+  flex-direction: column;
+  flex: 1;
+  width: 100%;
+  height: 100%;
+  min-height: 0;
+  overflow: hidden;
+  animation: reader-in 0.4s ease both;
+}
+
+@keyframes reader-in {
+  from {
+    opacity: 0;
+    transform: translateY(14px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+.reader__progress {
+  flex-shrink: 0;
+  height: 2px;
+  margin-bottom: 0.35rem;
+  background: rgba(255, 255, 255, 0.1);
+}
+
+.reader__progress span {
+  display: block;
+  height: 100%;
+  background: linear-gradient(90deg, #c81f2e, #ff5a64);
+  transition: width 0.3s ease;
+}
+
+/* ——— Light novel page ——— */
+.novel-page {
+  position: relative;
+  flex: 1 1 auto;
+  min-height: 0;
+  display: flex;
+  flex-direction: column;
+  width: 100%;
+  overflow: auto;
+  overscroll-behavior: contain;
+  background: var(--paper);
+  color: var(--paper-ink);
+  border: 1px solid rgba(255, 255, 255, 0.12);
+  -webkit-overflow-scrolling: touch;
+}
+
+.novel-page--in {
+  animation: page-in 0.3s ease both;
+}
+
+.novel-page--flip {
+  animation: page-out 0.28s ease both;
+}
+
+@keyframes page-in {
+  from {
+    opacity: 0;
+    transform: translateX(10px);
+  }
+  to {
+    opacity: 1;
+    transform: none;
+  }
+}
+
+@keyframes page-out {
+  to {
+    opacity: 0;
+    transform: translateX(-8px);
+  }
+}
+
+.novel-page__meta {
+  position: sticky;
+  top: 0;
+  z-index: 4;
+  display: flex;
+  justify-content: space-between;
+  padding: 0.55rem 1rem 0.45rem;
+  background: rgba(250, 248, 243, 0.94);
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: var(--paper-muted);
+  backdrop-filter: blur(6px);
+}
+
+.novel-page__spread {
+  position: relative;
+  padding: 0.35rem 1.05rem 0;
+}
+
+.novel-page__spread::after {
+  content: "";
+  display: table;
+  clear: both;
+}
+
+.novel-art {
+  width: min(46%, 9.8rem);
+  margin: 0 0 0.65rem;
+}
+
+.novel-art--left {
+  float: left;
+  margin-right: 0.9rem;
+  shape-outside: margin-box;
+}
+
+.novel-art--right {
+  float: right;
+  margin-left: 0.9rem;
+  shape-outside: margin-box;
+}
+
+.novel-art__img {
+  display: block;
+  width: 100%;
+  aspect-ratio: 3 / 4.2;
+  object-fit: cover;
+  object-position: center top;
+  filter: grayscale(0.15) contrast(1.05);
+}
+
+.novel-roman {
+  float: right;
+  margin: 0 0 0.35rem 0.65rem;
+  font-family: var(--font-roman);
+  font-size: clamp(3.4rem, 18vw, 4.6rem);
+  font-weight: 600;
+  line-height: 0.85;
+  letter-spacing: -0.04em;
+  color: #111;
+}
+
+.novel-head {
+  margin: 0 0 0.85rem;
+}
+
+.novel-title {
+  margin: 0;
+  font-family: var(--font-roman);
+  font-size: 1.35rem;
+  font-weight: 600;
+  letter-spacing: 0.02em;
+}
+
+.novel-sub {
+  margin: 0.2rem 0 0;
+  font-family: var(--font-body);
+  font-size: 0.92rem;
+  font-style: italic;
+  color: var(--paper-muted);
+}
+
+.novel-p {
+  margin: 0 0 1rem;
+  font-family: var(--font-body);
+  font-size: clamp(1.02rem, 4.1vw, 1.12rem);
+  line-height: 1.72;
+  font-weight: 400;
+  text-align: left;
+  hyphens: auto;
+}
+
+.novel-rule {
+  clear: both;
+  height: 1px;
+  margin: 0.35rem 1.05rem 1rem;
+  background: linear-gradient(
+    90deg,
+    transparent,
+    rgba(28, 25, 22, 0.35) 18%,
+    rgba(28, 25, 22, 0.35) 82%,
+    transparent
+  );
+}
+
+.novel-body {
+  padding: 0 1.05rem;
+}
+
+.novel-fin {
+  margin: 0.4rem 1.05rem 0.6rem;
+  text-align: center;
+  font-family: var(--font-roman);
+  font-size: 1.15rem;
+  font-style: italic;
+  letter-spacing: 0.12em;
+  color: var(--paper-muted);
+}
+
+.media-fallback {
+  width: 100%;
+  aspect-ratio: 3 / 4.2;
+  background: linear-gradient(145deg, #ddd6cb, #c9c0b3);
+}
+
+.novel-page__turn {
+  clear: both;
+  position: sticky;
+  bottom: 0;
+  z-index: 5;
+  display: flex;
+  gap: 0.45rem;
+  margin-top: auto;
+  padding: 0.65rem 0.75rem;
+  background: linear-gradient(
+    180deg,
+    rgba(250, 248, 243, 0) 0%,
+    rgba(250, 248, 243, 0.94) 30%,
+    var(--paper) 100%
+  );
+  border-top: 1px solid rgba(28, 25, 22, 0.08);
+}
+
+.turn-btn {
+  flex: 1;
+  min-height: 2.65rem;
+  border: 1px solid rgba(28, 25, 22, 0.18);
+  background: transparent;
+  color: var(--paper-ink);
+  font-size: 0.84rem;
+  font-weight: 700;
+  cursor: pointer;
+  -webkit-tap-highlight-color: transparent;
+}
+
+.turn-btn--next {
+  flex: 1.7;
+  background: #161412;
+  border-color: #161412;
+  color: #faf8f3;
+}
+
+.turn-btn:disabled {
+  opacity: 0.28;
+  cursor: default;
+}
+
+.turn-btn:active:not(:disabled) {
+  transform: translateY(1px);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .cover--open,
+  .cover__pulse,
+  .reader,
+  .novel-page--in,
+  .novel-page--flip {
+    animation: none !important;
+  }
+}
