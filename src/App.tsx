@@ -359,15 +359,12 @@ export default function App() {
     if (!start || !t) return;
     const dx = t.clientX - start.x;
     const dy = t.clientY - start.y;
-    if (Math.abs(dx) < 48 && Math.abs(dy) < 48) return;
-    if (Math.abs(dx) >= Math.abs(dy)) {
-      if (dx < 0) go(1);
-      else go(-1);
-    } else if (dy < -56) {
-      go(1);
-    } else if (dy > 56) {
-      go(-1);
-    }
+    // Solo swipe horizontal cambia de capítulo.
+    // El scroll vertical del texto no debe pasar páginas.
+    if (Math.abs(dx) < 64) return;
+    if (Math.abs(dx) < Math.abs(dy) * 1.4) return;
+    if (dx < 0) go(1);
+    else go(-1);
   };
 
   const chapter = CHAPTERS[index];
